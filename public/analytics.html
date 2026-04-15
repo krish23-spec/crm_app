@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics | CRM Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="sidebar-header"><div class="logo"><i class="fas fa-chart-line"></i><span>CRM Pro</span></div></div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+                <a href="/leads" class="nav-item"><i class="fas fa-users"></i><span>Leads</span></a>
+                <a href="/analytics" class="nav-item active"><i class="fas fa-chart-bar"></i><span>Analytics</span></a>
+                <div class="nav-divider"></div>
+                <button id="darkModeToggle" class="nav-item"><i class="fas fa-moon"></i><span>Dark Mode</span></button>
+                <button id="logoutBtn" class="nav-item logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar"><i class="fas fa-search"></i><input type="text" placeholder="Search..."></div>
+                <div class="user-info"><span id="userName"></span><i class="fas fa-user-circle"></i></div>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="page-header"><h2>Performance Analytics</h2></div>
+                
+                <div class="analytics-grid">
+                    <div class="chart-card full-width">
+                        <h3>Monthly Leads & Revenue Overview</h3>
+                        <canvas id="monthlyOverviewChart"></canvas>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>Lead Conversion Funnel</h3>
+                        <canvas id="funnelChart"></canvas>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <h3>Key Metrics</h3>
+                        <div class="metric-list">
+                            <div class="metric"><span>Conversion Rate</span><strong id="conversionRate">0%</strong></div>
+                            <div class="metric"><span>Avg Deal Value</span><strong id="avgDealValue">₹0</strong></div>
+                            <div class="metric"><span>Total Outreach</span><strong id="totalOutreach">0</strong></div>
+                            <div class="metric"><span>Active Leads</span><strong id="activeLeads">0</strong></div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>Leads by Source</h3>
+                        <canvas id="sourceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="/js/common.js"></script>
+    <script src="/js/analytics.js"></script>
+</body>
+</html>
