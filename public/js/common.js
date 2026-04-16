@@ -1,5 +1,7 @@
 // Common JS for all pages
-const API_URL = window.location.origin + '/api';
+
+// ✅ API URL (Render backend)
+const API_URL = "https://crm-app-ykuk.onrender.com";
 
 // Get stored token
 function getToken() {
@@ -26,29 +28,30 @@ function isAuthenticated() {
     return !!getToken();
 }
 
-// API request helper
+// ✅ API request helper (FIXED)
 async function apiRequest(endpoint, options = {}) {
     const token = getToken();
+
     const headers = {
         'Content-Type': 'application/json',
         ...options.headers
     };
-    
+
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
-    
+
     const response = await fetch(`${API_URL}${endpoint}`, {
         ...options,
         headers
     });
-    
+
     const data = await response.json();
-    
+
     if (!response.ok) {
         throw new Error(data.message || 'API request failed');
     }
-    
+
     return data;
 }
 
@@ -81,7 +84,7 @@ function showNotification(message, type = 'info') {
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     `;
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
         notification.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => notification.remove(), 300);
@@ -94,7 +97,7 @@ function initDarkMode() {
     if (isDark) {
         document.body.classList.add('dark-mode');
     }
-    
+
     const toggleBtn = document.getElementById('darkModeToggle');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
@@ -117,14 +120,12 @@ function loadUserName() {
 document.addEventListener('DOMContentLoaded', () => {
     initDarkMode();
     loadUserName();
-    
-    // Logout button
+
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', logout);
     }
-    
-    // Add animation styles
+
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideIn {
