@@ -7,7 +7,17 @@ const pool = new Pool({
   }
 });
 
-// 🔥 tables auto create
+// 🔥 Test DB Connection
+pool.connect((err, client, release) => {
+  if (err) {
+    console.error("❌ Database connection error:", err);
+  } else {
+    console.log("✅ PostgreSQL Connected Successfully");
+    release();
+  }
+});
+
+// 🔥 Auto Create Tables
 const initDB = async () => {
   try {
     await pool.query(`
@@ -18,7 +28,9 @@ const initDB = async () => {
         password VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+    `);
 
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS leads (
         id SERIAL PRIMARY KEY,
         name VARCHAR(100),
@@ -27,7 +39,9 @@ const initDB = async () => {
         status VARCHAR(50),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+    `);
 
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS deals (
         id SERIAL PRIMARY KEY,
         lead_id INTEGER,
@@ -39,7 +53,7 @@ const initDB = async () => {
 
     console.log("✅ Tables Created / Verified");
   } catch (err) {
-    console.error("❌ Table Creation Error:", err);
+    console.error("❌ Table creation error:", err);
   }
 };
 
