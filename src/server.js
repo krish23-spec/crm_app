@@ -15,6 +15,9 @@ app.use(morgan('dev'));
 
 app.use(express.static('public'));
 
+// 🔐 AUTH ROUTES (IMPORTANT)
+app.use('/api/auth', require('./routes/authRoutes'));
+
 // ==========================
 // 🔥 ROUTES
 // ==========================
