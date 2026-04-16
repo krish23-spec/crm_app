@@ -5,7 +5,7 @@ const morgan = require('morgan');
 
 const app = express();
 
-// ✅ Import DB (IMPORTANT PATH)
+// ✅ Import DB
 const db = require('./database/db');
 
 // Middleware
@@ -15,15 +15,15 @@ app.use(morgan('dev'));
 
 app.use(express.static('public'));
 
-// 🔐 AUTH ROUTES (IMPORTANT)
+// ==========================
+// 🔐 AUTH ROUTES (ADD THIS)
+// ==========================
 app.use('/api/auth', require('./routes/authRoutes'));
+
 
 // ==========================
 // 🔥 ROUTES
 // ==========================
-
-// Home Route
-
 
 // 🔥 Test DB
 app.get('/test-db', async (req, res) => {
@@ -36,7 +36,7 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
-// 🔥 Add User (Test Insert)
+// 🔥 Add User
 app.get('/add-user', async (req, res) => {
   try {
     await db.query(`
