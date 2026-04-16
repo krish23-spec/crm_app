@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadDashboardData() {
     try {
-        const data = await apiRequest('/analytics/dashboard');
+        const data = await apiRequest('/api/analytics/dashboard');
         
         if (data.success && data.analytics) {
             const a = data.analytics;

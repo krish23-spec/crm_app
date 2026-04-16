@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('loginPassword').value;
         
         try {
-            const data = await apiRequest('/api/auth/login', {
+            const data = await apiRequest('/auth/login', {   // ✅ FIX
                 method: 'POST',
                 body: JSON.stringify({ email, password })
             });
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         try {
-            const data = await apiRequest('/api/auth/register', {
+            const data = await apiRequest('/auth/register', {   // ✅ FIX
                 method: 'POST',
                 body: JSON.stringify({ name, email, password })
             });
