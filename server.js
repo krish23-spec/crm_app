@@ -24,14 +24,50 @@ const db = new Pool({
     }
 });
 
-// Test DB Connection
+// Test DB Connection + Create Tables
 db.connect((err, client, release) => {
     if (err) {
         console.error('❌ PostgreSQL connection failed:', err);
         process.exit(1);
     }
     console.log('✅ Connected to PostgreSQL database');
-    release();
+
+    // Create Tables
+    client.query(`
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(100),
+            email VARCHAR(100),
+            password VARCHAR(255)
+        );
+
+        CREATE TABLE IF NOT EXISTS leads (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(100),
+            email VARCHAR(100),
+            status VARCHAR(50)
+        );
+
+        CREATE TABLE IF NOT EXISTS deals (
+            id SERIAL PRIMARY KEY,
+            lead_id INT,
+            deal_value INT,
+            status VARCHAR(50)
+        );
+
+        CREATE TABLE IF NOT EXISTS reminders (
+            id SERIAL PRIMARY KEY,
+            title VARCHAR(100),
+            description TEXT
+        );
+    `, (err) => {
+        if (err) {
+            console.error("❌ Table create error:", err);
+        } else {
+            console.log("✅ Tables created successfully");
+        }
+        release();
+    });
 });
 
 // Make db accessible to routes
