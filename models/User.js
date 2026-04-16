@@ -8,30 +8,34 @@ class User {
 
     async create(userData) {
         const { name, email, password } = userData;
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        
-        const [result] = await this.db.promise().execute(
-            'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+
+        const result = await this.db.query(
+            'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id',
             [name, email, hashedPassword]
         );
-        return result.insertId;
+
+        return result.rows[0].id;
     }
 
     async findByEmail(email) {
-        const [rows] = await this.db.promise().execute(
-            'SELECT * FROM users WHERE email = ?',
+        const result = await this.db.query(
+            'SELECT * FROM users WHERE email = $1',
             [email]
         );
-        return rows[0];
+
+        return result.rows[0];
     }
 
     async findById(id) {
-        const [rows] = await this.db.promise().execute(
-            'SELECT id, name, email, role, created_at FROM users WHERE id = ?',
+        const result = await this.db.query(
+            'SELECT id, name, email, role, created_at FROM users WHERE id = $1',
             [id]
         );
-        return rows[0];
+
+        return result.rows[0];
     }
 
     generateToken(id, email) {
