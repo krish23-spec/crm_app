@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const app = express();
 
 // ✅ DB IMPORT
-const db = require('./database/db');
+const db = require('../database/db');
 
 // ✅ IMPORTANT (FIX)
 app.locals.db = db;
