@@ -1,9 +1,9 @@
 require('dotenv').config();
 const express = require('express');
-const mysql = require('mysql2');
 const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
+const { Pool } = require('pg');
 
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
@@ -16,25 +16,22 @@ const { errorHandler } = require('./middleware/errorHandler');
 // Initialize Express
 const app = express();
 
-// Database Connection
-const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+// PostgreSQL Connection
+const db = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 // Test DB Connection
-db.getConnection((err, connection) => {
+db.connect((err, client, release) => {
     if (err) {
-        console.error('Database connection failed:', err.message);
+        console.error('❌ PostgreSQL connection failed:', err);
         process.exit(1);
     }
-    console.log('✅ Connected to MySQL database');
-    connection.release();
+    console.log('✅ Connected to PostgreSQL database');
+    release();
 });
 
 // Make db accessible to routes
@@ -77,5 +74,5 @@ app.use(errorHandler);
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
