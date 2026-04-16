@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadLeads() {
     try {
         //const data = await apiRequest('/leads');
-        const data = await apiRequest('/leads');
+        const data = await apiRequest('/api/leads');
         console.log("API DATA:", data);
         if (data.success) {
             currentLeads = data.leads;
@@ -148,12 +148,12 @@ async function saveLead(e) {
     try {
         let response;
         if (leadId) {
-            response = await apiRequest(`/leads/${leadId}`, {
+            response = await apiRequest(`/api/leads/${leadId}`, {
                 method: 'PUT',
                 body: JSON.stringify(leadData)
             });
         } else {
-            response = await apiRequest('/leads', {
+            response = await apiRequest('/api/leads', {
                 method: 'POST',
                 body: JSON.stringify(leadData)
             });
@@ -185,7 +185,7 @@ async function deleteLead(id) {
 
 async function recordOutreach(id) {
     try {
-        const response = await apiRequest(`/leads/${id}/outreach`, { method: 'POST' });
+        const response = await apiRequest(`/api/leads/${id}/outreach`, { method: 'POST' });
         if (response.success) {
             showNotification('Outreach recorded successfully', 'success');
             await loadLeads();
@@ -213,7 +213,7 @@ function openReminderModal(leadId, leadName) {
 
 async function createReminder(leadId, title, reminderDate, description) {
     try {
-        const response = await apiRequest('/reminders', {
+        const response = await apiRequest('/api/reminders', {
             method: 'POST',
             body: JSON.stringify({
                 lead_id: leadId,

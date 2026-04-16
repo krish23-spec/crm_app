@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadAnalytics() {
     try {
         // Load dashboard data for metrics
-        const dashboardData = await apiRequest('/analytics/dashboard');
-        if (dashboardData.success) {
+            const dashboardData = await apiRequest('/api/analytics/dashboard');        if (dashboardData.success) {
             const a = dashboardData.analytics;
             
             // Update metrics
@@ -125,7 +124,7 @@ function updateSourceChart(statusData) {
 
 async function loadSourceData() {
     try {
-        const leadsData = await apiRequest('/leads');
+        const leadsData = await apiRequest('/api/leads');
         if (leadsData.success && leadsData.leads) {
             const sourceCounts = {};
             leadsData.leads.forEach(lead => {
