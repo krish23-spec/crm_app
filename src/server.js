@@ -18,7 +18,7 @@ app.use(express.static('public'));
 // ==========================
 // 🔐 AUTH ROUTES (ADD THIS)
 // ==========================
-app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/auth', require('../routes/authRoutes'));
 
 
 // ==========================
