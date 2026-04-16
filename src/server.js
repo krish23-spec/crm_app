@@ -13,14 +13,14 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+app.use(express.static('public'));
+
 // ==========================
 // 🔥 ROUTES
 // ==========================
 
 // Home Route
-app.get('/', (req, res) => {
-  res.send("🚀 CRM Backend Running Successfully");
-});
+
 
 // 🔥 Test DB
 app.get('/test-db', async (req, res) => {
