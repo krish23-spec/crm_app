@@ -1,86 +1,59 @@
-const User = require('../models/User');
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
 
-exports.register = async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-        const db = req.app.locals.db;
-        const userModel = new User(db);
+const app = express();
 
-        // Check if user exists
-        const existingUser = await userModel.findByEmail(email);
-        if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
+// ✅ DB IMPORT
+const db = require('./database/db');
 
-        // Create user
-        const userId = await userModel.create({ name, email, password });
-        const user = await userModel.findById(userId);
-        
-        // Generate token
-        const token = userModel.generateToken(user.id, user.email);
+// ✅ IMPORTANT (FIX)
+app.locals.db = db;
 
-        res.status(201).json({
-            success: true,
-            token,
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email
-            }
-        });
-    } catch (error) {
-        console.error('Register error:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-};
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(morgan('dev'));
 
-exports.login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const db = req.app.locals.db;
-        const userModel = new User(db);
+// Static files
+app.use(express.static('public'));
 
-        const user = await userModel.findByEmail(email);
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
 
-        const isMatch = await userModel.comparePassword(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
+// ==========================
+// 🔥 ROUTES
+// ==========================
 
-        const token = userModel.generateToken(user.id, user.email);
+// ✅ Import routes
+const authRoutes = require('./routes/authRoutes');
 
-        res.json({
-            success: true,
-            token,
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role
-            }
-        });
-    } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-};
+// ✅ Use routes
+app.use('/api/auth', authRoutes);
 
-exports.getMe = async (req, res) => {
-    try {
-        const db = req.app.locals.db;
-        const userModel = new User(db);
-        const user = await userModel.findById(req.user.id);
-        
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
 
-        res.json({ user });
-    } catch (error) {
-        console.error('Get me error:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-};
+// ==========================
+// 🔥 TEST ROUTES
+// ==========================
+
+// Test DB
+app.get('/test-db', async (req, res) => {
+  try {
+    const result = await db.query('SELECT NOW()');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// ==========================
+// 🚀 START SERVER
+// ==========================
+
+const PORT = process.env.PORT || 5000;
+
+// ✅ Render FIX (VERY IMPORTANT)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
