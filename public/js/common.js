@@ -1,8 +1,7 @@
 // Common JS for all pages
 
 // ✅ API URL (Render backend)
-const API_URL = "https://crm-app-ykuk.onrender.com";
-
+const API_URL = "https://crm-app-ykuk.onrender.com/api";
 // Get stored token
 function getToken() {
     return localStorage.getItem('token');
